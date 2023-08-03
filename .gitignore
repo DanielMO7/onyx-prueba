@@ -3,14 +3,14 @@ onyx-back/public/hot
 onyx-back/public/storage
 onyx-back/storage/*.key
 onyx-back/vendor
-onyx-back.env
-onyx-back.env.backup
-onyx-back.phpunit.result.cache
-onyx-backdocker-compose.override.yml
-onyx-backHomestead.json
-onyx-backHomestead.yaml
-onyx-backnpm-debug.log
-onyx-backyarn-error.log
+onyx-back/.env
+onyx-back/.env.backup
+onyx-back/.phpunit.result.cache
+onyx-back/docker-compose.override.yml
+onyx-back/Homestead.json
+onyx-back/Homestead.yaml
+onyx-back/npm-debug.log
+onyx-back/yarn-error.log
 onyx-back/.idea
 onyx-back/.vscode
 
