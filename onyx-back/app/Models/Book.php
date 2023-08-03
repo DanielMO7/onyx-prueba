@@ -34,7 +34,7 @@ class Book extends Model
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'author' => 'required|string',
-            'year_publication' => 'required|date',
+            'year_publication' => 'required|integer|min:1800|max:' . date('Y'),
             'genre' => 'required|string'
         ]);
 
