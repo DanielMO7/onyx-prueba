@@ -1,0 +1,34 @@
+/* Estilos para la página 404 */
+.not-found {
+  background-color: #f7fafc;
+}
+
+.not-found h1 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.not-found h2 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.not-found p {
+  font-size: 18px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.not-found a {
+  display: inline-block;
+  background-color: #2563eb;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.not-found a:hover {
+  background-color: #1d4ed8;
+}

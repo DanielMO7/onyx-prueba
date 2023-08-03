@@ -1,0 +1,10 @@
+<div class="m-2 p-2">
+  <h1 class="font-bold uppercase text-2xl font-blue-700 text-center ">Catalogo de Libros:</h1>
+  <div class="grid grid-cols-4 gap-2">
+    <div *ngFor="let book of books" class="col-span-1 m-2 p-2">
+      <div class="text-center font-bold uppercase text-xl font-cyan-500"> {{ book.title }}</div>
+
+    </div>
+  </div>
+</div>
+
