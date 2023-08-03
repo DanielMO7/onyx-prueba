@@ -1,10 +1,31 @@
 <div class="m-2 p-2">
-  <h1 class="font-bold uppercase text-2xl font-blue-700 text-center ">Catalogo de Libros:</h1>
-  <div class="grid grid-cols-4 gap-2">
-    <div *ngFor="let book of books" class="col-span-1 m-2 p-2">
-      <div class="text-center font-bold uppercase text-xl font-cyan-500"> {{ book.title }}</div>
-
+  <h1 class="font-bold uppercase text-2xl font-blue-700 text-center ">Libros.</h1>
+  <div class="grid grid-cols-2 m-2 p-2">
+    <div class="col-span-1 text-center flex items-center justify-center align-center">
+      <div class="font-bold text-md">Catalogo:</div>
+    </div>
+    <div class="col-span-1 text-end  flex items-center justify-end align-center">
+      <button class="font-bold bg-blue-500 shadow-md rounded-md hover:bg-blue-700 text-white m-2 p-2"><i
+          class="fa-solid fa-circle-plus mr-2"></i>Agregar Libro</button>
+    </div>
+  </div>
+  <hr>
+  <div class="grid grid-cols-4 gap-2 m-2 p-2">
+    <div *ngFor="let book of books" class="col-span-4 md:col-span-1 m-2 p-2 shadow-md rounded-md hover:bg-gray-100">
+      <div class="text-center font-bold capitalize text-lg text-blue-500"> {{ book.title }}</div>
+      <div class="text-center m-4 p-4 hover:text-blue-500"><i class="fa-solid fa-book text-6xl"></i></div>
+      <div class="text-center capitalize text-sm">Autor: <span class="font-bold">{{ book.author }}</span> </div>
+      <div class="text-center capitalize text-sm">Fecha de Publicación: <span class="font-bold">{{ book.year_publication
+          }}</span> </div>
+      <div class="text-center capitalize text-sm"> Genero: <span class="font-bold">{{ book.genre }}</span> </div>
+      <div class="m-1 p-1">
+        <hr>
+      </div>
+      <div class="flex justify-center align-center items-center">
+        <div class="m-2 p-2"><i class="fa-solid fa-pen-to-square text-2xl hover:text-green-500 cursor-pointer"></i>
+        </div>
+        <div class="m-2 p-2"><i class="fa-solid fa-trash-can text-2xl hover:text-red-500 cursor-pointer"></i></div>
+      </div>
     </div>
   </div>
 </div>
-
