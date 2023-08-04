@@ -11,7 +11,7 @@
     </div>
   </div>
   <hr>
-  <div class="grid grid-cols-4 gap-2 m-2 p-2">
+  <div *ngIf="!loadingPague" class="grid grid-cols-4 gap-2 m-2 p-2 ">
     <div *ngFor="let book of books"
       class="col-span-4 md:col-span-1 m-2 p-2 shadow-md rounded-md hover:bg-gray-100 hover:scale-110">
       <div class="text-center font-bold capitalize text-lg text-blue-500"> {{ book.title }}</div>
@@ -24,10 +24,21 @@
         <hr>
       </div>
       <div class="flex justify-center align-center items-center">
-        <div class="m-2 p-2"><i (click)="openForm(false)"
+        <div class="m-2 p-2"><i (click)="openForm(false, book)"
             class="fa-solid fa-pen-to-square text-2xl hover:text-green-500 cursor-pointer"></i>
         </div>
-        <div class="m-2 p-2"><i class="fa-solid fa-trash-can text-2xl hover:text-red-500 cursor-pointer"></i></div>
+        <div class="m-2 p-2"><i (click)="deleteBook(book)" class="fa-solid fa-trash-can text-2xl hover:text-red-500 cursor-pointer"></i></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="loadingPague" class="grid grid-cols-4 gap-2 m-2 p-2 ">
+    <div class="col-span-4">
+      <div class="flex justify-center items-center h-screen">
+        <div class="flex space-x-2">
+          <div class="h-4 w-4 rounded-full bg-blue-500 animate-bounce"></div>
+          <div class="h-4 w-4 rounded-full bg-blue-500 animate-bounce"></div>
+          <div class="h-4 w-4 rounded-full bg-blue-500 animate-bounce"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -41,7 +52,7 @@
       </div>
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
       <div
-        class="w-[95%] inline-block align-bottom bg-white rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle">
+        class="w-[40%] inline-block align-bottom bg-white rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle">
         <div>
           <div class="text-left">
             <div class="grid grid-cols-5">
@@ -54,14 +65,14 @@
                   </div>
                 </div>
               </div>
-              <div class="col-span-5">
+              <div class="col-span-5 p-2 m-2">
                 <form [formGroup]="typeForm ? formCreateBook: formUpdateBook"
                   (ngSubmit)="typeForm ? saveCrateBook() : saveUpdateBook(); submittedForm = true">
                   <div>
                     <div class="px-2 py-3 bg-white sm:p-6 w-full">
-                      <div class="grid grid-cols-1 gap-6 ">
+                      <div class="grid grid-cols-4 gap-2 ">
                         <!-- Titulo del Evento -->
-                        <div class="col-span-1">
+                        <div class="col-span-4">
                           <label for="title" class="block text-left font-medium text-gray-700">Titulo del Libro:</label>
                           <input formControlName="title"
                             class="w-full mt-2 px-3 py-2 border rounded-md text-gray-700  focus:outline-none focus:border-2 focus:border-sky-400"
@@ -76,7 +87,7 @@
                           </div>
                         </div>
                         <!-- Autor -->
-                        <div class="col-span-1">
+                        <div class="col-span-4">
                           <label for="author" class="block text-left font-medium text-gray-700">Autor:</label>
                           <input formControlName="author"
                             class="w-full mt-2 px-3 py-2 border rounded-md text-gray-700  focus:outline-none focus:border-2 focus:border-sky-400"
@@ -90,23 +101,32 @@
                           </div>
                         </div>
                         <!-- Año de Publicación -->
-                        <div class="col-span-1 ">
+                        <div class="col-span-4">
                           <label for="year_publication" class="block text-left font-medium text-gray-700">Año de
                             Publicación:</label>
                           <input formControlName="year_publication"
                             class="w-full mt-2 px-3 py-2 border rounded-md text-gray-700  focus:outline-none focus:border-2 focus:border-sky-400"
-                            type="text" name="year_publication" placeholder="Escriba el Año de Publicación del el Libro"
-                            required [ngClass]="classInputError('year_publication')" />
+                            type="number" min="1800" max="2100" step="1" name="year_publication"
+                            placeholder="Escriba el Año de Publicación del el Libro" required
+                            [ngClass]="classInputError('year_publication')" />
                           <div *ngIf="validarInputEvent('year_publication', submittedForm)">
                             <div class="font-bold text-red-500 mx-2 text-xs"
                               *ngIf="typeForm ? formCreateBook.get('year_publication')?.errors?.['required']: formUpdateBook.get('year_publication')?.errors?.['required'];">
                               El Año de Publicación del libro es Requerido.
                             </div>
+                            <div class="font-bold text-red-500 mx-2 text-xs"
+                              *ngIf="typeForm ? formCreateBook.get('year_publication')?.errors?.['min']: formUpdateBook.get('year_publication')?.errors?.['min'];">
+                              El Año de Publicación No puede ser Inferio al "1800".
+                            </div>
+                            <div class="font-bold text-red-500 mx-2 text-xs"
+                              *ngIf="typeForm ? formCreateBook.get('year_publication')?.errors?.['max']: formUpdateBook.get('year_publication')?.errors?.['max'];">
+                              El Año de Publicación No puede ser Mayor al "2010".
+                            </div>
                           </div>
                         </div>
 
                         <!-- Genero -->
-                        <div class="col-span-1">
+                        <div class="col-span-4">
                           <label for="genre" class="block text-left font-medium text-gray-700">Genero:</label>
                           <input formControlName="genre"
                             class="w-full mt-2 px-3 py-2 border rounded-md text-gray-700  focus:outline-none focus:border-2 focus:border-sky-400"
@@ -120,7 +140,7 @@
                           </div>
                         </div>
 
-                        <div class="col-span-1 sm:col-span-4">
+                        <div class="col-span-4">
                           <div class="grid grid-cols-2 gap-2">
                             <div class="col-span-1 flex justify-center align-center items-center m-2 p-2">
                               <button *ngIf="!loadingCrud" (click)="closeCrud()" type="button"
@@ -130,10 +150,13 @@
                             </div>
                             <div class="col-span-1 flex justify-center align-center items-center m-2 p-2">
                               <button *ngIf="!loadingCrud" type="submit"
-                                class="w-64 bg-green-500 hover:bg-none font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline boton-inicio-sesion text-white">
-                                Agregar Evento
+                                class="w-64 bg-blue-500 hover:bg-none font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline boton-inicio-sesion text-white">
+                                <i class="fa-solid fa-circle-plus mr-2"></i>{{ typeForm ? 'Agregar' : 'Editar' }} Libro
                               </button>
-                              <button *ngIf="loadingCrud" type="button"
+                            </div>
+                            <div *ngIf="loadingCrud"
+                              class="col-span-2 flex justify-center align-center items-center m-2 p-2">
+                              <button type="button"
                                 class="w-36 inline-flex justify-center items-center px-4 py-2 font-semibold leading-6 shadow rounded-md text-white bg-green-500 hover:bg-green-700 transition ease-in-out duration-150 cursor-not-allowed font-bold">
                                 <div class="flex font-bold">
                                   <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">

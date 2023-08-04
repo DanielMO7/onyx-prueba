@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { GeneralService } from '../general.service';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
@@ -19,6 +19,7 @@ export class BookComponent {
   typeForm: boolean = false;
 
   loadingCrud: boolean = false;
+  loadingPague: boolean = false;
 
   formCreateBook: FormGroup;
   formUpdateBook: FormGroup;
@@ -31,7 +32,7 @@ export class BookComponent {
     private form_update_book: FormBuilder
   ) {
     this.formCreateBook = this.form_create_book.group({
-      title: ['',Validators.required],
+      title: ['', Validators.required],
       author: ['', Validators.required],
       year_publication: ['', Validators.required],
       genre: ['', Validators.required],
@@ -39,37 +40,179 @@ export class BookComponent {
 
     this.formUpdateBook = this.form_update_book.group({
       id: ['', Validators.required],
-      title: ['',Validators.required],
+      title: ['', Validators.required],
       author: ['', Validators.required],
       year_publication: ['', Validators.required],
       genre: ['', Validators.required],
     });
-
-    this.generalService.getBooks().subscribe((data) => {
-      if (data.status == 1) {
-        this.books = data.data;
-        console.log(this.books);
+    this.loadingPague = true;
+    this.generalService.getBooks().subscribe(
+      (data) => {
+        if (data.status == 1) {
+          this.books = data.data;
+          this.loadingPague = false;
+          console.log(this.books);
+        }
+      },
+      (error) => {
+        if (error.status == 500) {
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Ha Ocurrido un Error Interno!',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       }
-    });
+    );
   }
 
-  openForm(tipo_form: boolean) {
+  openForm(tipo_form: boolean, data: any | null = '') {
     if (tipo_form) {
       this.typeForm = true; // Agregar
     } else {
       this.typeForm = false; // Actualizar
+      if (data) {
+        this.formUpdateBook = this.form_update_book.group({
+          id: [data.id, Validators.required],
+          title: [data.title, Validators.required],
+          author: [data.author, Validators.required],
+          year_publication: [
+            Number(data.year_publication),
+            Validators.required,
+          ],
+          genre: [data.genre, Validators.required],
+        });
+      }
     }
-
     this.openCrudBook = true;
   }
 
-  saveCrateBook() {}
-  saveUpdateBook() {}
+  saveCrateBook() {
+    if (this.formCreateBook.valid) {
+      this.loadingCrud = true;
+      this.generalService.createBook(this.formCreateBook.value).subscribe(
+        (data) => {
+          if (data.status == 1) {
+            this.books.push(data.data);
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title:
+                'Libro "' +
+                this.formCreateBook.value.title +
+                '" Agregado Correctamente!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.loadingCrud = false;
+            this.closeCrud();
+          }
+        },
+        (error) => {
+          if (error.status == 500) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: 'Ha Ocurrido un Error Interno!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+          this.loadingCrud = false;
+        }
+      );
+    }
+  }
+  saveUpdateBook() {
+    if (this.formUpdateBook.valid) {
+      this.loadingCrud = true;
+      console.log(this.formUpdateBook.value);
+      this.generalService.updateBook(this.formUpdateBook.value).subscribe(
+        (data) => {
+          if (data.status == 1) {
+            for (let i = 0; i < this.books.length; i++) {
+              if (this.books[i].id === this.formUpdateBook.value.id) {
+                this.books[i] = data.data;
+                break;
+              }
+            }
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title:
+                'Libro "' +
+                this.formUpdateBook.value.title +
+                '" Actualizado Correctamente!',
+              showConfirmButton: false,
+              timer: 2500,
+            });
+            this.loadingCrud = false;
+            this.closeCrud();
+          }
+        },
+        (error) => {
+          if (error.status == 500) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: 'Ha Ocurrido un Error Interno!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+          this.loadingCrud = false;
+        }
+      );
+    }
+  }
+
+  deleteBook(book: any) {
+    Swal.fire({
+      title: '¿Seguro que Deseas Borrar "' + book.title + '" ?',
+      text: 'Esto borrara el libro completamente, estas seguro?!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrarlo!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.generalService.deleteBook(book.id).subscribe(
+          (data) => {
+            if (data.status == 1) {
+              for (let i = 0; i < this.books.length; i++) {
+                if (this.books[i].id === this.formUpdateBook.value.id) {
+                  this.books.splice(i, 1);
+                  break;
+                }
+              }
+              Swal.fire('Borrado!', 'Libro Borrado Correctamente.', 'success');
+            }
+          },
+          (error) => {
+            if (error.status == 500) {
+              Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Ha Ocurrido un Error Interno!',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          }
+        );
+      }
+    });
+  }
 
   closeCrud() {
     this.submittedForm = false;
     this.typeForm = false;
     this.openCrudBook = false;
+    this.formCreateBook.reset();
+    this.formUpdateBook.reset();
   }
 
   /**
