@@ -1,26 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralService {
+
+  // URL del localhost
   private apiUrl = 'http://127.0.0.1:8000/api';
   constructor(private http : HttpClient) {
   }
 
-  getBooks(){
-    return this.http.get<any>((`${this.apiUrl}/books`));
+  // Trae los libros de la base de datos.
+  getBooks(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/books`);
   }
 
-  createBook(data:any){
+  // Crea los libros
+  createBook(data:any): Observable<any> {
     return this.http.post<any>((`${this.apiUrl}/create-book`), data);
   }
 
-  updateBook(data:any){
+  // Edita o Actualiza un libro
+  updateBook(data:any): Observable<any> {
     return this.http.post<any>((`${this.apiUrl}/updated-book`), data);
   }
 
-  deleteBook(data:any){
+  // Elimina un Libro
+  deleteBook(data:any): Observable<any> {
     return this.http.post<any>((`${this.apiUrl}/delete-book`), data);
 
   }

@@ -11,6 +11,7 @@
     </div>
   </div>
   <hr>
+  <!-- Contenido de la pagina web -->
   <div *ngIf="!loadingPague" class="grid grid-cols-4 gap-2 m-2 p-2 ">
     <div *ngFor="let book of books"
       class="col-span-4 md:col-span-1 m-2 p-2 shadow-md rounded-md hover:bg-gray-100 hover:scale-110">
@@ -31,6 +32,7 @@
       </div>
     </div>
   </div>
+  <!-- Loading de La Página -->
   <div *ngIf="loadingPague" class="grid grid-cols-4 gap-2 m-2 p-2 ">
     <div class="col-span-4">
       <div class="flex justify-center items-center h-screen">
@@ -44,6 +46,7 @@
   </div>
 </div>
 
+<!-- Dialog Que contiene el CRUD del Flujo de los libros. -->
 <div *ngIf="openCrudBook">
   <div class="fixed z-10 inset-0 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -66,6 +69,7 @@
                 </div>
               </div>
               <div class="col-span-5 p-2 m-2">
+                <!-- Formulario que realiza el crud dependiendo de la opción seleccionada por el usuario -->
                 <form [formGroup]="typeForm ? formCreateBook: formUpdateBook"
                   (ngSubmit)="typeForm ? saveCrateBook() : saveUpdateBook(); submittedForm = true">
                   <div>
@@ -140,6 +144,7 @@
                           </div>
                         </div>
 
+                        <!-- Botones de Acciones -->
                         <div class="col-span-4">
                           <div class="grid grid-cols-2 gap-2">
                             <div class="col-span-1 flex justify-center align-center items-center m-2 p-2">

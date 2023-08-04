@@ -10,7 +10,3 @@ Route::controller(BookController::class)->group(function () {
     Route::post('updated-book', 'updated_book');
     Route::post('delete-book', 'delete_book');
 });
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});

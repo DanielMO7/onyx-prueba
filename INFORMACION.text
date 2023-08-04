@@ -1,0 +1,50 @@
+# onyx-prueba
+Bienvenido este es un proyecto realizado como prueba técnica para la empresa Onyx, en este documento detallo lo importante y a 
+tener en cuenta de las carpetas y en donde se encuentra cada requemamiento de la prueba.
+
+El proyecto fue realizado con Laravel y Angular. En este se encuentra una API (Laravel) y un Front (Angular).
+
+Para correr correctamente el proyecto se debe tener PHP 8, Composer y Node
+
+En Laravel se encuentran las migraciones, los controladores, los modelos y las rutas necesarios para el funcionamiento
+correcto de la API. 
+    - Migraciones: onyx-back/database/migrations/2023_08_03_043154_create_books_table.php
+    - Controlador: onyx-back/app/http/controllers/BookController.php.
+    - Modelo: onyx-back/app/models/Book.php.
+    - Rutas: onyx-back/routes/api.php.
+
+En Angular se encuentran el modulo web de manejo de libros, los servicios necesarios y los componentes para darle un toque
+estético a la pagina.
+    - Modulo Libros: onyx-front/scr/app/modules/book/book.components.ts
+    - Servicios: onyx-front/scr/app/modules/genera.service.ts
+    - Componentes:  onyx-front/scr/app/components/*
+    - Rutas: onyx-front/scr/app/app-routing.modules.ts
+
+Todos los formularios tiene validaciones en los campos tanto en el Front como en el Back
+
+Test Automatizado: Para realizar un test automatizado en angular se debe ingresar por consola hasta la carpeta onyx-front
+y ejecutar el comando -ng test 
+
+También hay una base de datos por si no se desea ejecutar las migraciones. Simplemente se importa en la base de datos de prueba
+y se invoca en el .env de Laravel.
+
+Una vez el proyecto este clonado se debe ingresar a cada carpeta y ejecutar las dependencias.
+
+Pasos para ejecutar Laravel:
+    1 .cd onyx-back
+    2 composer install
+    3 copiar el .env.example y nombrarlo como .env
+    4 agregar la conexión a la base de datos crear una db con el nombre "onyx-db"
+    5 php artisan migrate
+    6 php artisan serve.
+
+Pasos para ejecutar Angular:
+    1 .cd onyx-front
+    2 npm install
+    3 ng serve.
+
+Pasos para ejecutar el test de angular
+    1 .cd onyx.front
+    2 ng test
+
+Muchas Gracias por su atención, espero verlos pronto!
